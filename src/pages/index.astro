@@ -1,0 +1,288 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+    <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+      <div class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
+        <div class="max-w-md mx-auto">
+          <div class="flex items-center justify-center">
+            <img src="/logoSena.png" alt="SENA Logo" class="h-16" />
+          </div>
+          <div class="divide-y divide-gray-200">
+            <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+              <h1 class="text-2xl font-bold text-center mb-8">Soporte a la Mano</h1>
+              
+              <form id="supportForm" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Número de Caso en Mesa</label>
+                  <input type="text" id="caseNumber" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Número de Ticket</label>
+                  <input type="text" id="ticketNumber" readonly class="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-50">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Nombre del Soporte</label>
+                  <input type="text" id="supportName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Correo del Soporte</label>
+                  <input type="email" id="supportEmail" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Falla Presentada</label>
+                  <textarea id="issue" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Tipo de Dispositivo</label>
+                  <input type="text" id="deviceType" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Serial del Dispositivo</label>
+                  <input type="text" id="serialNumber" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Solución</label>
+                  <textarea id="solution" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Fotos</label>
+                  <div id="imageContainer" class="mt-1 flex flex-wrap gap-2"></div>
+                  <input type="file" id="photos" multiple accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Usuario Atendido</label>
+                  <input type="text" id="userName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Correo del Usuario</label>
+                  <input type="email" id="userEmail" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">¿Atendió la conformidad?</label>
+                  <div class="mt-2 space-x-4">
+                    <label class="inline-flex items-center">
+                      <input type="radio" name="conformity" value="si" required class="form-radio text-green-600">
+                      <span class="ml-2">Sí</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                      <input type="radio" name="conformity" value="no" required class="form-radio text-green-600">
+                      <span class="ml-2">No</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Firma del Usuario</label>
+                  <div class="mt-1 border rounded-md">
+                    <canvas id="signaturePad" class="w-full h-40 border rounded-md"></canvas>
+                  </div>
+                  <button type="button" id="clearSignature" class="mt-1 text-sm text-red-600 hover:text-red-800">
+                    Limpiar firma
+                  </button>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Observaciones</label>
+                  <textarea id="observations" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50"></textarea>
+                </div>
+
+                <div class="pt-5">
+                  <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    Generar Reporte PDF
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+import SignaturePad from 'signature_pad';
+import html2pdf from 'html2pdf.js';
+
+// Inicializar el pad de firma
+const canvas = document.getElementById('signaturePad');
+const signaturePad = new SignaturePad(canvas);
+
+// Limpiar firma
+document.getElementById('clearSignature').addEventListener('click', () => {
+  signaturePad.clear();
+});
+
+// Generar número de ticket automáticamente
+function generateTicketNumber() {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const year = String(now.getFullYear()).slice(-2);
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  
+  return `${day}${month}${year}-${hours}:${minutes}`;
+}
+
+document.getElementById('ticketNumber').value = generateTicketNumber();
+
+// Almacenar las imágenes como base64
+let uploadedImages = [];
+
+// Manejo de imágenes
+document.getElementById('photos').addEventListener('change', function(e) {
+  const container = document.getElementById('imageContainer');
+  
+  for (let file of e.target.files) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const imageData = e.target.result;
+      uploadedImages.push(imageData);
+      
+      const div = document.createElement('div');
+      div.className = 'relative';
+      
+      const img = document.createElement('img');
+      img.src = imageData;
+      img.className = 'h-20 w-20 object-cover rounded';
+      
+      const deleteBtn = document.createElement('button');
+      deleteBtn.innerHTML = '×';
+      deleteBtn.className = 'absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center';
+      deleteBtn.onclick = function() {
+        const index = uploadedImages.indexOf(imageData);
+        if (index > -1) {
+          uploadedImages.splice(index, 1);
+        }
+        div.remove();
+      };
+      
+      div.appendChild(img);
+      div.appendChild(deleteBtn);
+      container.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Manejo del formulario
+document.getElementById('supportForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+// Crear el PDF
+const element = document.createElement('div');
+element.innerHTML = `
+  <div style="padding: 40px; font-family: Arial, sans-serif; color: #000; font-size: 14px;">
+
+    <!-- Logo y título -->
+    <div style="text-align: center; margin-bottom: 10px;">
+      <img src="/logoSena.png" style="height: 80px; display: block; margin: 0 auto;">
+      <div style="font-size: 14px; margin-top: 5px; color: #00af00;">Soporte a la mano</div>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+      <div style="font-size: 14px; margin-top: 5px;">Comprobante de Soporte Técnico</div>
+    </div>
+
+    <!-- Caso y Fecha -->
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+      <div><strong>Nro de Caso en MS:</strong> ${document.getElementById('caseNumber').value || 'Ninguno'}</div>
+      <div><strong>Nro de Ticket / Fecha de atención:</strong> ${document.getElementById('ticketNumber').value}</div>
+    </div>
+
+    <!-- Detalle del Soporte -->
+    <p style="margin-bottom: 30px;">
+      El Soporte <strong>${document.getElementById('supportName').value}</strong> con correo electrónico 
+      <strong><a href="mailto:${document.getElementById('supportEmail').value}">${document.getElementById('supportEmail').value}</a></strong>, 
+      siendo el día y hora <strong>${document.getElementById('ticketNumber').value}</strong> atendió la 
+      Falla Presentada:<strong> ${document.getElementById('issue').value}</strong>; 
+      en el dispositivo:<strong>${document.getElementById('deviceType').value}</strong> con 
+      serial<strong> ${document.getElementById('serialNumber').value}</strong>, se brindó la 
+      Solución:<strong>${document.getElementById('solution').value}.</strong>
+    </p>
+
+    <!-- Detalle del Usuario -->
+    <p style="margin-bottom: 40px;">
+      El Usuario <strong>${document.getElementById('userName').value}</strong> con correo electrónico 
+      <strong><a href="mailto:${document.getElementById('userEmail').value}">${document.getElementById('userEmail').value}</a></strong>, 
+      <strong>${document.querySelector('input[name="conformity"]:checked').value === 'si' ? 'Sí está conforme' : 'No está conforme'}</strong>, con la atención brindada.
+    </p>
+
+    <!-- Observaciones -->
+    <div style="margin-bottom: 40px;">
+      <strong>Observación:</strong><br>
+      ${document.getElementById('observations').value || 'Ninguna'}
+    </div>
+
+    <!-- Firma -->
+    <div style="margin-bottom: 40px;">
+      <strong>Firma:</strong><br>
+      <img src="${signaturePad.toDataURL()}" style="max-width: 250px; height: auto; margin-top: 10px;">
+    </div>
+
+    <!-- SALTO DE PÁGINA PARA LA SEGUNDA SECCIÓN -->
+    <div style="page-break-before: always;"></div>
+
+    <!-- Evidencia Fotográfica -->
+    ${uploadedImages.length > 0 ? `
+      <div>
+        <strong style="font-size: 16px;">Evidencia Fotográficas</strong>
+        <div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">
+          ${uploadedImages.map(img => `
+            <img src="${img}" style="max-width: 200px; height: auto; border-radius: 4px;">
+          `).join('')}
+        </div>
+      </div>
+    ` : ''}
+  </div>
+`;
+
+
+  const opt = {
+    margin: 1,
+    filename: `reporte-${document.getElementById('ticketNumber').value}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+
+  try {
+    await html2pdf().set(opt).from(element).save();
+    alert('Reporte PDF generado correctamente');
+    this.reset();
+    signaturePad.clear();
+    document.getElementById('imageContainer').innerHTML = '';
+    document.getElementById('ticketNumber').value = generateTicketNumber();
+    uploadedImages = [];
+  } catch (error) {
+    alert('Error al generar el PDF: ' + error.message);
+  }
+});
+</script>
+
+<style>
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    @apply border-gray-300 rounded-md shadow-sm;
+  }
+  
+  canvas {
+    touch-action: none;
+  }
+</style>
