@@ -212,8 +212,8 @@ element.innerHTML = `
       siendo el día y hora <strong>${document.getElementById('ticketNumber').value}</strong> atendió la 
       Falla Presentada:<strong> ${document.getElementById('issue').value}</strong>; 
       en el dispositivo:<strong>${document.getElementById('deviceType').value}</strong> con 
-      serial<strong> ${document.getElementById('serialNumber').value}</strong>, se brindó la 
-      Solución:<strong>${document.getElementById('solution').value}.</strong>
+      serial<strong> ${document.getElementById('serialNumber').value}</strong>, se brindó la siguiente
+      solución:<strong>${document.getElementById('solution').value}.</strong>
     </p>
 
     <!-- Detalle del Usuario -->
@@ -238,17 +238,19 @@ element.innerHTML = `
     <!-- SALTO DE PÁGINA PARA LA SEGUNDA SECCIÓN -->
     <div style="page-break-before: always;"></div>
 
-    <!-- Evidencia Fotográfica -->
-    ${uploadedImages.length > 0 ? `
-      <div>
-        <strong style="font-size: 16px;">Evidencia Fotográficas</strong>
-        <div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">
-          ${uploadedImages.map(img => `
-            <img src="${img}" style="max-width: 200px; height: auto; border-radius: 4px;">
-          `).join('')}
+<!-- Evidencia Fotográfica -->
+${uploadedImages.length > 0 ? `
+  <div>
+    <strong style="font-size: 16px;">Evidencia Fotográficas</strong>
+    <div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">
+      ${uploadedImages.map(img => `
+        <div style="max-width: 200px; flex: 0 0 auto;">
+          <img src="${img}" style="width: 100%; height: auto; border-radius: 4px; object-fit: contain;">
         </div>
-      </div>
-    ` : ''}
+      `).join('')}
+    </div>
+  </div>
+` : ''}
   </div>
 `;
 
