@@ -242,9 +242,9 @@ element.innerHTML = `
 ${uploadedImages.length > 0 ? `
   <div>
     <strong style="font-size: 16px;">Evidencia Fotográficas</strong>
-    <div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">
+    <div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between;">
       ${uploadedImages.map(img => `
-        <div style="max-width: 200px; flex: 0 0 auto;">
+        <div style="width: 48%;">
           <img src="${img}" style="width: 100%; height: auto; border-radius: 4px; object-fit: contain;">
         </div>
       `).join('')}
