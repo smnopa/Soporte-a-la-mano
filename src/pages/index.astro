@@ -7,13 +7,15 @@ import Layout from '../layouts/Layout.astro';
     <div class="relative py-3 sm:max-w-xl sm:mx-auto">
       <div class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
         <div class="max-w-md mx-auto">
+            <!-- Logo -->
           <div class="flex items-center justify-center">
             <img src="/logoSena.png" alt="SENA Logo" class="h-16" />
           </div>
           <div class="divide-y divide-gray-200">
             <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+              <!-- Titulo -->
               <h1 class="text-2xl font-bold text-center mb-8">Soporte a la Mano</h1>
-              
+              <!-- Formulario -->
               <form id="supportForm" class="space-y-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-700">Número de Caso en Mesa</label>
@@ -113,7 +115,6 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </div>
 </Layout>
-
 <script>
 import SignaturePad from 'signature_pad';
 import html2pdf from 'html2pdf.js';
@@ -212,7 +213,7 @@ element.innerHTML = `
       siendo el día y hora <strong>${document.getElementById('ticketNumber').value}</strong> atendió la 
       Falla Presentada:<strong> ${document.getElementById('issue').value}</strong>; 
       en el dispositivo:<strong>${document.getElementById('deviceType').value}</strong> con 
-      serial<strong> ${document.getElementById('serialNumber').value}</strong>, se brindó la siguiente
+      serial o placa<strong> ${document.getElementById('serialNumber').value}</strong>, se brindó la siguiente
       solución:<strong>${document.getElementById('solution').value}.</strong>
     </p>
 
