@@ -86,12 +86,12 @@ import Layout from '../layouts/Layout.astro';
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700">Firma del Usuario</label>
+                  <label class="block text-sm font-medium text-gray-700">Visto bueno</label>
                   <div class="mt-1 border rounded-md">
                     <canvas id="signaturePad" class="w-full h-40 border rounded-md"></canvas>
                   </div>
                   <button type="button" id="clearSignature" class="mt-1 text-sm text-red-600 hover:text-red-800">
-                    Limpiar firma
+                    Limpiar
                   </button>
                 </div>
 
@@ -231,7 +231,7 @@ element.innerHTML = `
 
     <!-- Firma -->
     <div style="margin-bottom: 40px;">
-      <strong>Firma:</strong><br>
+      <strong>Visto bueno:</strong><br>
       <img src="${signaturePad.toDataURL()}" style="max-width: 250px; height: auto; margin-top: 10px;">
     </div>
 
@@ -244,8 +244,8 @@ ${uploadedImages.length > 0 ? `
     <strong style="font-size: 16px;">Evidencia Fotográficas</strong>
     <div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between;">
       ${uploadedImages.map(img => `
-        <div style="width: 48%;">
-          <img src="${img}" style="width: 100%; height: auto; border-radius: 4px; object-fit: contain;">
+        <div style="width: 100%;">
+          <img src="${img}" style="width: 100%; height: 100%; border-radius: 4px; object-fit: contain;">
         </div>
       `).join('')}
     </div>
