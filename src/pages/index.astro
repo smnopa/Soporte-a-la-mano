@@ -25,11 +25,168 @@ import Form from '../components/Form.astro';
     </div>
   </div>
 </Layout>
-
-<script type="module" src="/public/scripts/signature.js"></script>
-<script type="module" src="/public/scripts/ticket.js"></script>
-<script type="module" src="/public/scripts/images.js"></script>
-<script type="module" src="/public/scripts/generate-pdf.js"></script>
+<script>
+  import SignaturePad from 'signature_pad';
+  import html2pdf from 'html2pdf.js';
+  
+  // Inicializar el pad de firma
+  const canvas = document.getElementById('signaturePad');
+  const signaturePad = new SignaturePad(canvas);
+  
+  // Limpiar firma
+  document.getElementById('clearSignature').addEventListener('click', () => {
+    signaturePad.clear();
+  });
+  
+  // Generar número de ticket automáticamente
+  function generateTicketNumber() {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = String(now.getFullYear()).slice(-2);
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    return `${day}${month}${year}-${hours}:${minutes}`;
+  }
+  
+  document.getElementById('ticketNumber').value = generateTicketNumber();
+  
+  // Almacenar las imágenes como base64
+  let uploadedImages = [];
+  
+  // Manejo de imágenes
+  document.getElementById('photos').addEventListener('change', function(e) {
+    const container = document.getElementById('imageContainer');
+    
+    for (let file of e.target.files) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imageData = e.target.result;
+        uploadedImages.push(imageData);
+        
+        const div = document.createElement('div');
+        div.className = 'relative';
+        
+        const img = document.createElement('img');
+        img.src = imageData;
+        img.className = 'h-20 w-20 object-cover rounded';
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = '×';
+        deleteBtn.className = 'absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center';
+        deleteBtn.onclick = function() {
+          const index = uploadedImages.indexOf(imageData);
+          if (index > -1) {
+            uploadedImages.splice(index, 1);
+          }
+          div.remove();
+        };
+        
+        div.appendChild(img);
+        div.appendChild(deleteBtn);
+        container.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  // Manejo del formulario
+  document.getElementById('supportForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+  // Crear el PDF
+  const element = document.createElement('div');
+  element.innerHTML = `
+    <div style="padding: 40px; font-family: Arial, sans-serif; color: #000; font-size: 14px;">
+  
+      <!-- Logo y título -->
+      <div style="text-align: center; margin-bottom: 10px;">
+        <img src="/logoSena.png" style="height: 80px; display: block; margin: 0 auto;">
+        <div style="font-size: 14px; margin-top: 5px; color: #00af00;">Soporte a la mano</div>
+      </div>
+  
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 14px; margin-top: 5px;">Comprobante de Soporte Técnico</div>
+      </div>
+  
+      <!-- Caso y Fecha -->
+      <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <div><strong>Nro de Caso en MS:</strong> ${document.getElementById('caseNumber').value || 'Ninguno'}</div>
+        <div><strong>Nro de Ticket / Fecha de atención:</strong> ${document.getElementById('ticketNumber').value}</div>
+      </div>
+  
+      <!-- Detalle del Soporte -->
+      <p style="margin-bottom: 30px;">
+        El Soporte <strong>${document.getElementById('supportName').value}</strong> con correo electrónico 
+        <strong><a href="mailto:${document.getElementById('supportEmail').value}">${document.getElementById('supportEmail').value}</a></strong>, 
+        siendo el día y hora <strong>${document.getElementById('ticketNumber').value}</strong> atendió la 
+        Falla Presentada:<strong> ${document.getElementById('issue').value}</strong>; 
+        en el dispositivo:<strong>${document.getElementById('deviceType').value}</strong> con 
+        serial o placa<strong> ${document.getElementById('serialNumber').value}</strong>, se brindó la siguiente
+        solución:<strong>${document.getElementById('solution').value}.</strong>
+      </p>
+  
+      <!-- Detalle del Usuario -->
+      <p style="margin-bottom: 40px;">
+        El Usuario <strong>${document.getElementById('userName').value}</strong> con correo electrónico 
+        <strong><a href="mailto:${document.getElementById('userEmail').value}">${document.getElementById('userEmail').value}</a></strong>, 
+        <strong>${document.querySelector('input[name="conformity"]:checked').value === 'si' ? 'Sí está conforme' : 'No está conforme'}</strong>, con la atención brindada.
+      </p>
+  
+      <!-- Observaciones -->
+      <div style="margin-bottom: 40px;">
+        <strong>Observación:</strong><br>
+        ${document.getElementById('observations').value || 'Ninguna'}
+      </div>
+  
+      <!-- Firma -->
+      <div style="margin-bottom: 40px;">
+        <strong>Visto bueno:</strong><br>
+        <img src="${signaturePad.toDataURL()}" style="max-width: 250px; height: auto; margin-top: 10px;">
+      </div>
+  
+      <!-- SALTO DE PÁGINA PARA LA SEGUNDA SECCIÓN -->
+      <div style="page-break-before: always;"></div>
+  
+  <!-- Evidencia Fotográfica -->
+  ${uploadedImages.length > 0 ? `
+    <div>
+      <strong style="font-size: 16px;">Evidencia Fotográficas</strong>
+      <div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between;">
+        ${uploadedImages.map(img => `
+          <div style="width: 100%;">
+            <img src="${img}" style="width: 100%; height: 100%; border-radius: 4px; object-fit: contain;">
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  ` : ''}
+    </div>
+  `;
+  
+  
+    const opt = {
+      margin: 1,
+      filename: `reporte-${document.getElementById('serialNumber').value}-${document.getElementById('ticketNumber').value}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+  
+    try {
+      await html2pdf().set(opt).from(element).save();
+      alert('Reporte PDF generado correctamente');
+      this.reset();
+      signaturePad.clear();
+      document.getElementById('imageContainer').innerHTML = '';
+      document.getElementById('ticketNumber').value = generateTicketNumber();
+      uploadedImages = [];
+    } catch (error) {
+      alert('Error al generar el PDF: ' + error.message);
+    }
+  });
+  </script>
 
 <style>
   input[type="text"],
