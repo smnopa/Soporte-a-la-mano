@@ -107,7 +107,7 @@ import Form from '../components/Form.astro';
       </div>
   
       <div style="text-align: center; margin-bottom: 20px;">
-        <div style="font-size: 14px; margin-top: 5px;">Comprobante de Soporte Técnico</div>
+        <div style="font-size: 14px; margin-top: 5px;">Comprobante de Soporte Técnico del ID:${document.getElementById('idSelector').value}</div>
       </div>
   
       <!-- Caso y Fecha -->
@@ -118,13 +118,10 @@ import Form from '../components/Form.astro';
   
       <!-- Detalle del Soporte -->
       <p style="margin-bottom: 30px;">
-        El Soporte <strong>${document.getElementById('supportName').value}</strong> con correo electrónico 
-        <strong><a href="mailto:${document.getElementById('supportEmail').value}">${document.getElementById('supportEmail').value}</a></strong>, 
-        siendo el día y hora <strong>${document.getElementById('ticketNumber').value}</strong> atendió la 
-        Falla Presentada:<strong> ${document.getElementById('issue').value}</strong>; 
-        en el dispositivo:<strong>${document.getElementById('deviceType').value}</strong> con 
-        serial o placa<strong> ${document.getElementById('serialNumber').value}</strong>, se brindó la siguiente
-        solución:<strong>${document.getElementById('solution').value}.</strong>
+        El Soporte <strong>${document.getElementById('supportName').value}</strong> con correo electrónico <strong><a href="mailto:${document.getElementById('supportEmail').value}">${document.getElementById('supportEmail').value}</a></strong>, 
+        siendo el día y hora <strong>${document.getElementById('ticketNumber').value}</strong> atendió el incidente: <strong> ${document.getElementById('issue').value}</strong>; 
+        en el dispositivo: <strong>${document.getElementById('deviceType').value}</strong> con serial o placa<strong> ${document.getElementById('serialNumber').value}</strong>, se brindó la siguiente
+        solución: <strong>${document.getElementById('solution').value}.</strong>
       </p>
   
       <!-- Detalle del Usuario -->
@@ -149,23 +146,43 @@ import Form from '../components/Form.astro';
       <!-- SALTO DE PÁGINA PARA LA SEGUNDA SECCIÓN -->
       <div style="page-break-before: always;"></div>
   
-  <!-- Evidencia Fotográfica -->
-  ${uploadedImages.length > 0 ? `
-    <div>
-      <strong style="font-size: 16px;">Evidencia Fotográficas</strong>
-      <div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between;">
-        ${uploadedImages.map(img => `
-          <div style="width: 100%;">
-            <img src="${img}" style="width: 100%; height: 100%; border-radius: 4px; object-fit: contain;">
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  ` : ''}
+      <strong style="font-size: 16px;">Evidencia Fotográfica</strong>
+      <div id="imagesWrapper" style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 12px;"></div>
     </div>
   `;
   
-  
+const wrapper = element.querySelector('#imagesWrapper');
+
+for (let i = 0; i < uploadedImages.length; i++) {
+  const img = new Image();
+  img.src = uploadedImages[i];
+
+  await new Promise(resolve => {
+    img.onload = () => {
+      const isVertical = img.naturalHeight > img.naturalWidth;
+
+      const div = document.createElement('div');
+      div.style = `
+        width: ${isVertical ? '48%' : '100%'};
+        max-width: ${isVertical ? '48%' : '100%'};
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        padding: 4px;
+      `;
+
+      img.style = `
+        width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+        object-fit: contain;
+      `;
+
+      div.appendChild(img);
+      wrapper.appendChild(div);
+      resolve();
+    };
+  });
+}
     const opt = {
       margin: 1,
       filename: `reporte-${document.getElementById('serialNumber').value}-${document.getElementById('ticketNumber').value}.pdf`,
@@ -186,7 +203,7 @@ import Form from '../components/Form.astro';
       alert('Error al generar el PDF: ' + error.message);
     }
   });
-  </script>
+  </script>   
 
 <style>
   input[type="text"],
