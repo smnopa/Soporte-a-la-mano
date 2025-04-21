@@ -1,48 +1,133 @@
-# Astro Starter Kit: Basics
+# Soporte a la Mano
 
-```sh
-npm create astro@latest -- --template basics
-```
+**"Soporte a la Mano"** es una aplicación web diseñada para facilitar la generación de reportes técnicos en formato PDF. Esta herramienta está orientada a equipos de soporte técnico que necesitan documentar incidentes, registrar soluciones aplicadas y generar comprobantes para los usuarios atendidos.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## 🚀 Características Principales
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- **Formulario de Soporte Técnico**:
+  - Captura información como:
+    - Número de caso en mesa.
+    - Número de ticket (generado automáticamente).
+    - Nombre y correo del soporte técnico.
+    - Falla presentada, tipo de dispositivo, serial o placa, y solución aplicada.
+  - Incluye un desplegable para seleccionar IDs predefinidos.
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+- **Formulario de Usuario**:
+  - Captura datos del usuario atendido:
+    - Nombre y correo electrónico.
+    - Conformidad con la atención brindada.
+    - Observaciones adicionales.
 
-## 🚀 Project Structure
+- **Evidencia Fotográfica**:
+  - Permite subir imágenes relacionadas con el incidente.
+  - Las imágenes se muestran como vista previa y pueden eliminarse antes de generar el reporte.
 
-Inside of your Astro project, you'll see the following folders and files:
+- **Firma Digital**:
+  - Incluye un canvas interactivo para capturar la firma del usuario.
+  - La firma se incluye automáticamente en el reporte PDF.
+
+- **Generación de Reportes en PDF**:
+  - Utiliza la librería `html2pdf.js` para generar un comprobante técnico en formato PDF.
+  - El reporte incluye:
+    - Información del soporte técnico y del usuario.
+    - Evidencia fotográfica.
+    - Firma digital.
+    - Observaciones.
+
+- **Interfaz Limpia y Responsiva**:
+  - Diseñada con estilos modernos y responsivos utilizando Tailwind CSS.
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+- **Frontend**:
+  - [Astro](https://astro.build/): Framework para construir aplicaciones web rápidas y modernas.
+  - [Tailwind CSS](https://tailwindcss.com/): Framework de CSS para estilos responsivos y modernos.
+  - [SignaturePad](https://github.com/szimek/signature_pad): Librería para capturar firmas digitales en un canvas.
+  - [html2pdf.js](https://github.com/eKoopmans/html2pdf.js): Librería para convertir contenido HTML en archivos PDF.
+
+- **JavaScript**:
+  - Manejo de eventos del formulario.
+  - Generación de números de ticket automáticamente.
+  - Conversión de imágenes a base64 para incluirlas en el PDF.
+
+---
+
+## 📂 Estructura del Proyecto
 
 ```text
-/
+src/
+├── components/
+│   └── Form.astro          # Componente del formulario principal
+├── layouts/
+│   └── Layout.astro        # Layout base para la aplicación
+├── pages/
+│   └── index.astro         # Página principal de la aplicación
 ├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   └── logoSena.png        # Logo utilizado en el reporte PDF
+└── styles/
+    └── global.css          # Estilos globales
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+---
 
-## 🧞 Commands
+## 🚀 Cómo Usar
 
-All commands are run from the root of the project, from a terminal:
+### **Requisitos Previos**
+- Node.js instalado en tu máquina.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+### **Instalación**
+1. Clona este repositorio:
+   ```bash
+   git clone https://github.com/tu-usuario/soporte-a-la-mano.git
+   ```
+2. Navega al directorio del proyecto:
+   ```bash
+   cd soporte-a-la-mano
+   ```
+3. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-## 👀 Want to learn more?
+### **Ejecución en Desarrollo**
+1. Inicia el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+2. Abre tu navegador en [http://localhost:3000](http://localhost:3000).
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### **Despliegue**
+1. Construye el proyecto para producción:
+   ```bash
+   npm run build
+   ```
+2. Sirve los archivos estáticos desde la carpeta `dist` o despliega en plataformas como Vercel o Netlify.
+
+---
+
+## 📋 Cómo Funciona
+
+1. Completa el formulario con los datos del soporte técnico y del usuario.
+2. Sube imágenes relacionadas con el incidente.
+3. Firma digitalmente en el canvas.
+4. Haz clic en "Generar Reporte PDF" para descargar el comprobante técnico.
+
+---
+
+## 📸 Capturas de Pantalla
+
+### **Formulario Principal**
+![Formulario Principal](ruta-a-la-imagen)
+
+### **Reporte PDF Generado**
+![Reporte PDF](ruta-a-la-imagen)
+
+---
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas. Si encuentras un problema o tienes una idea para mejorar la aplicación, abre un issue o envía un pull request.
+
+---
