@@ -96,7 +96,7 @@ src/
    ```bash
    npm run dev
    ```
-2. Abre tu navegador en [http://localhost:3000](http://localhost:3000).
+2. Abre tu navegador en [http://localhost:4321/](http://localhost:4321/).
 
 ### **Despliegue**
 1. Construye el proyecto para producción:

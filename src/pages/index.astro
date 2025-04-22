@@ -25,6 +25,7 @@ import Form from '../components/Form.astro';
     </div>
   </div>
 </Layout>
+
 <script>
   import SignaturePad from 'signature_pad';
   import html2pdf from 'html2pdf.js';
@@ -116,11 +117,14 @@ import Form from '../components/Form.astro';
         <div><strong>Nro de Ticket / Fecha de atención:</strong> ${document.getElementById('ticketNumber').value}</div>
       </div>
   
-      <!-- Detalle del Soporte -->
+   <!-- Detalle del Soporte -->
       <p style="margin-bottom: 30px;">
-        El Soporte <strong>${document.getElementById('supportName').value}</strong> con correo electrónico <strong><a href="mailto:${document.getElementById('supportEmail').value}">${document.getElementById('supportEmail').value}</a></strong>, 
-        siendo el día y hora <strong>${document.getElementById('ticketNumber').value}</strong> atendió el incidente: <strong> ${document.getElementById('issue').value}</strong>; 
-        en el dispositivo: <strong>${document.getElementById('deviceType').value}</strong> con serial o placa<strong> ${document.getElementById('serialNumber').value}</strong>, se brindó la siguiente
+        El Soporte <strong>${document.getElementById('supportName').value}</strong> con correo electrónico 
+        <strong><a href="mailto:${document.getElementById('supportEmail').value}">${document.getElementById('supportEmail').value}</a></strong>, 
+        siendo el día y hora <strong>${document.getElementById('ticketNumber').value}</strong> atendió el incidente: 
+        <strong> ${document.getElementById('issue').value}</strong>; 
+        en el dispositivo: <strong>${document.getElementById('deviceType').value}</strong> con 
+        serial o placa<strong> ${document.getElementById('serialNumber').value}</strong>, se brindó la siguiente
         solución: <strong>${document.getElementById('solution').value}.</strong>
       </p>
   
