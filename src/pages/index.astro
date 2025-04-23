@@ -196,16 +196,49 @@ for (let i = 0; i < uploadedImages.length; i++) {
     };
   
     try {
-      await html2pdf().set(opt).from(element).save();
-      alert('Reporte PDF generado correctamente');
-      this.reset();
-      signaturePad.clear();
-      document.getElementById('imageContainer').innerHTML = '';
-      document.getElementById('ticketNumber').value = generateTicketNumber();
-      uploadedImages = [];
-    } catch (error) {
-      alert('Error al generar el PDF: ' + error.message);
-    }
+  await html2pdf().set(opt).from(element).save();
+
+  alert('Reporte PDF generado correctamente');
+
+  const numero = document.getElementById('userNumber').value.trim().replace(/\D/g, '').slice(-10);
+  const mensaje = encodeURIComponent("Hola, te envío el reporte técnico desde Soporte a la Mano 📋✅");
+
+  // Mostramos botón flotante por si falla la redirección automática
+  const btn = document.createElement('button');
+  btn.textContent = "Enviar por WhatsApp";
+  btn.style = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 16px;
+    background-color: #25D366;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 9999;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  `;
+  btn.onclick = () => {
+    window.location.href = `https://wa.me/57${numero}?text=${mensaje}`;
+  };
+  document.body.appendChild(btn);
+
+  // Intentar redirigir automáticamente a WhatsApp después de un tiempo
+  setTimeout(() => {
+    window.location.href = `https://wa.me/57${numero}?text=${mensaje}`;
+  }, 1500);
+
+  // Limpieza de formulario
+  this.reset();
+  signaturePad.clear();
+  document.getElementById('imageContainer').innerHTML = '';
+  document.getElementById('ticketNumber').value = generateTicketNumber();
+  uploadedImages = [];
+} catch (error) {
+  alert('Error al generar el PDF: ' + error.message);
+}
   });
   </script>   
 
