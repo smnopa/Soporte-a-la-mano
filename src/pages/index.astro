@@ -156,6 +156,7 @@ import Form from '../components/Form.astro';
   `;
   
 const wrapper = element.querySelector('#imagesWrapper');
+let imagesInPage = 0; // Contador de imágenes en la página actual
 
 for (let i = 0; i < uploadedImages.length; i++) {
   const img = new Image();
@@ -163,26 +164,38 @@ for (let i = 0; i < uploadedImages.length; i++) {
 
   await new Promise(resolve => {
     img.onload = () => {
-      const isVertical = img.naturalHeight > img.naturalWidth;
-
+      // Crear un contenedor para la imagen
       const div = document.createElement('div');
       div.style = `
-        width: ${isVertical ? '48%' : '100%'};
-        max-width: ${isVertical ? '48%' : '100%'};
-        border: 1px solid #d1d5db;
-        border-radius: 0.5rem;
-        padding: 4px;
+        width: 100%;
+        max-width: 400px; /* Tamaño máximo más grande para las imágenes */
+        height: 400px; /* Altura fija más grande para las imágenes */
+        margin: 0 auto 10px auto; /* Espaciado inferior más grande */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; /* Ocultar cualquier parte que sobresalga */
       `;
 
+      // Estilo de la imagen
       img.style = `
         width: 100%;
-        height: auto;
-        border-radius: 0.5rem;
-        object-fit: contain;
+        height: 100%;
+        object-fit: cover; /* Ajustar la imagen sin deformarla */
       `;
 
       div.appendChild(img);
       wrapper.appendChild(div);
+      imagesInPage++;
+
+      // Si ya hay 2 imágenes en la página, añade un salto de página
+      if (imagesInPage === 2 && i !== uploadedImages.length - 1) {
+        const pageBreak = document.createElement('div');
+        pageBreak.style = 'page-break-before: always;';
+        wrapper.appendChild(pageBreak);
+        imagesInPage = 0; // Reinicia el contador para la nueva página
+      }
+
       resolve();
     };
   });
@@ -202,28 +215,6 @@ for (let i = 0; i < uploadedImages.length; i++) {
 
   const numero = document.getElementById('userNumber').value.trim().replace(/\D/g, '').slice(-10);
   const mensaje = encodeURIComponent("Hola, te envío el reporte técnico desde Soporte a la Mano 📋✅");
-
-  // Mostramos botón flotante por si falla la redirección automática
-  const btn = document.createElement('button');
-  btn.textContent = "Enviar por WhatsApp";
-  btn.style = `
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 16px;
-    background-color: #25D366;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    z-index: 9999;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  `;
-  btn.onclick = () => {
-    window.location.href = `https://wa.me/57${numero}?text=${mensaje}`;
-  };
-  document.body.appendChild(btn);
 
   // Intentar redirigir automáticamente a WhatsApp después de un tiempo
   setTimeout(() => {
