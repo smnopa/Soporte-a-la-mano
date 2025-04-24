@@ -38,6 +38,8 @@ import Form from '../components/Form.astro';
     const clearSignatureButton = document.getElementById('clearSignature');
     const signatureImage = document.getElementById('signatureImage');
 
+    let finalSignature = '';
+
   // Inicializar el pad de firma
   const canvas = document.getElementById('signaturePad');
   const signaturePad = new SignaturePad(canvas);
@@ -87,6 +89,8 @@ import Form from '../components/Form.astro';
   
         // Obtener el DataURL rotado
         const rotatedDataURL = tempCanvas.toDataURL();
+
+        finalSignature = rotatedDataURL; // GUARDAMOS ESTO PARA EL PDF
   
         // Mostrar la firma rotada
         signatureImage.src = rotatedDataURL;
@@ -203,7 +207,7 @@ import Form from '../components/Form.astro';
       <!-- Firma -->
       <div style="margin-bottom: 40px;">
         <strong>Visto bueno:</strong><br>
-        <img src="${signaturePad.toDataURL()}" style="max-width: 250px; height: auto; margin-top: 10px;">
+        <img src="${finalSignature}" style="max-width: 250px; height: auto; margin-top: 10px;">
       </div>
 
       <!-- SALTO DE PÁGINA PARA LA SEGUNDA SECCIÓN -->
