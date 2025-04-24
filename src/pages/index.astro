@@ -30,14 +30,73 @@ import Form from '../components/Form.astro';
   import SignaturePad from 'signature_pad';
   import html2pdf from 'html2pdf.js';
   
+  // Modal de firma
+  const signatureModal = document.getElementById('signatureModal');
+    const openSignatureButton = document.getElementById('openSignature');
+    const closeSignatureButton = document.getElementById('closeSignature');
+    const saveSignatureButton = document.getElementById('saveSignature');
+    const clearSignatureButton = document.getElementById('clearSignature');
+    const signatureImage = document.getElementById('signatureImage');
+
   // Inicializar el pad de firma
   const canvas = document.getElementById('signaturePad');
   const signaturePad = new SignaturePad(canvas);
   
-  // Limpiar firma
-  document.getElementById('clearSignature').addEventListener('click', () => {
-    signaturePad.clear();
-  });
+   // Función para ajustar el tamaño del canvas
+   function resizeCanvas() {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = canvas.offsetHeight * ratio;
+      canvas.getContext("2d").scale(ratio, ratio);
+      signaturePad.clear();
+    }
+  
+    // Abrir el modal de firma
+    openSignatureButton.addEventListener('click', () => {
+      signatureModal.classList.remove('hidden');
+      signatureModal.classList.add('flex');
+      resizeCanvas();
+    });
+  
+    // Cerrar el modal
+    closeSignatureButton.addEventListener('click', () => {
+      signatureModal.classList.add('hidden');
+      signatureModal.classList.remove('flex');
+    });
+  
+    // Limpiar la firma
+    clearSignatureButton.addEventListener('click', () => {
+      signaturePad.clear();
+    });
+  
+    // Guardar la firma y rotarla
+    saveSignatureButton.addEventListener('click', () => {
+      if (!signaturePad.isEmpty()) {
+        // Crear un canvas temporal para la rotación
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+  
+        // Asignar dimensiones rotadas
+        tempCanvas.width = canvas.height;
+        tempCanvas.height = canvas.width;
+  
+        // Rotar 90 grados
+        tempCtx.translate(tempCanvas.width / 2, tempCanvas.height / 2);
+        tempCtx.rotate(Math.PI / 2); // 90 grados en lugar de -90
+        tempCtx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
+  
+        // Obtener el DataURL rotado
+        const rotatedDataURL = tempCanvas.toDataURL();
+  
+        // Mostrar la firma rotada
+        signatureImage.src = rotatedDataURL;
+        signatureImage.classList.remove('hidden');
+  
+        // Cerrar el modal
+        signatureModal.classList.add('hidden');
+        signatureModal.classList.remove('flex');
+      }
+    });
   
   // Generar número de ticket automáticamente
   function generateTicketNumber() {
